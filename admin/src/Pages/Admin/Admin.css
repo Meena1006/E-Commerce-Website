@@ -1,0 +1,19 @@
+.admin{  
+    display: flex;  
+    background-color:white;
+}  
+
+@media(max-width:800px){  
+    .admin{  
+        flex-direction: column;  
+    }  
+}
+
+.space{
+    /* border: 1px solid red; */
+    position: relative;
+    left: 220px;
+    top: 78px;width: 1270px;
+    overflow: scroll;
+    scrollbar-width:none;
+}

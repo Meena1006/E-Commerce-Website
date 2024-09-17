@@ -1,0 +1,18 @@
+span{
+    text-align: center;
+    position: relative;
+    bottom: 20px;
+    font-weight: 700;
+    font-size: 25px;
+    padding: 20px;
+}
+
+.navbar{
+    z-index: 1000; 
+    top: 0;
+    left: 0;
+    width: 100%;
+    position: fixed;
+   background-color: #d78e60;
+   border-bottom: 5px groove rgb(222, 226, 206);
+}
