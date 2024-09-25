@@ -1,19 +1,24 @@
 import React, { useState } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button } from '@mui/material';
+import StripePage from "../StripePage/StripePage"
 
 const CheckOutpg = ({ open, onClose }) => {
     const [name, setName] = useState('');
     const [address, setAddress] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
+    const [flag, setflag] = useState(false);
+
 
     const handleSave = () => {
         // Handle saving shipping details logic here
         // For example, you can send data to backend or handle state in parent component
         console.log(`Shipping details saved: Name - ${name}, Address - ${address}, Phone Number - ${phoneNumber}`);
-        onClose(); // Close dialog after saving
+        setflag(true)
+        // onClose(); // Close dialog after saving
     };
 
     return (
+        <div>
         <Dialog open={open} onClose={onClose}>
             <DialogTitle>Enter Shipping Details</DialogTitle>
             <DialogContent>
@@ -44,14 +49,20 @@ const CheckOutpg = ({ open, onClose }) => {
                 />
             </DialogContent>
             <DialogActions>
-                <Button onClick={onClose} color="secondary">
+                <Button onClick={onClose}>
                     Cancel
                 </Button>
-                <Button onClick={handleSave} color="primary">
-                    Save
+                <Button onClick={handleSave}>
+                    Proceed
                 </Button>
             </DialogActions>
+            <div >
+            {flag && <StripePage />}
+            </div>
+            
         </Dialog>
+            
+            </div>
     );
 };
 

@@ -8,7 +8,6 @@ const OrderSummary = () => {
         <div>{all_product.map((e) => {
             if (cartItems[e.id] > 0) {
                 return <div>
-                    <h1>CART SUMMARY </h1>
                     <div className="cartitems-format cartitems-format-main">
                         <img src={e.image} alt="" className="carticon-product-icon" />
                         <p>{e.name}</p>

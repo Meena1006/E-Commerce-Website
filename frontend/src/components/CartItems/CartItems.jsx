@@ -1,13 +1,16 @@
 import React from 'react'
 import { ShopContext } from '../../Context/ShopContext'
 import "./CartItems.css"
-import { useContext, useState } from 'react'
+import {useNavigate} from "react-router-dom"
+import { useContext, useState} from 'react'
 import remove_icon from "../Assets/cart_cross_icon.png"
 import OrderSummary from '../OrderSummary/OrderSummary'
 import CheckOutpg from '../CheckOutPg/CheckOutpg'
 const CartItems = () => {
     const { getTotalCartAmount,all_product, cartItems, removeFromCart } = useContext(ShopContext);
     const [dialogOpen, setDialogOpen] = useState(false);
+
+    const navigate = useNavigate()
 
     const handleOpenDialog = () => {
         setDialogOpen(true);
@@ -48,6 +51,7 @@ const CartItems = () => {
             })}
             <div className="cartitems-down">
                 <div className="cartitems-total">
+                    <h2>CART SUMMARY</h2>
                     <OrderSummary/>
                     <h2>CART TOTALS</h2>
                     <div className="cartitems-total-item">
@@ -64,7 +68,7 @@ const CartItems = () => {
                         <h3>Total</h3>
                         <h3>${getTotalCartAmount()}</h3>
                     </div>
-                <button  onClick={handleOpenDialog}>PROCEED TO CHECKOUT</button>
+                <button  onClick={()=>navigate('/order')}>PROCEED TO CHECKOUT</button>
                 </div>
                 <div className="cartitems-promocode">
                 <p>If you have a promo code, Enter it here</p>

@@ -6,9 +6,13 @@ const jwt = require("jsonwebtoken");
 const multer = require("multer");
 const path = require("path");
 const cors = require("cors");
+const orderRouter = require("./routes/orderRoute.js");
+
+
 
 app.use(express.json());
 app.use(cors());
+app.use("/order", orderRouter)
 // Import necessary modules
 // const mongoose = require('mongoose');
 const dotenv = require('dotenv');
@@ -260,6 +264,10 @@ app.post('/getcart', fetchUser, async (req, res) => {
   let userData = await Users.findOne({_id: req.user.id});  
   res.json(userData.cartData);  
 });
+
+
+const paymentRoute = require('./routes/myRoute');
+app.use('/api', paymentRoute);
 
 
 
