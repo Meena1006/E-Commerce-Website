@@ -8,7 +8,7 @@ import { ShopContext } from '../../Context/ShopContext';
 
 
 // Load Stripe.js with your publishable key
-const stripePromise = loadStripe('pk_test_51Q0jkWP9YB5tzFF9e2VMug37nwm5DOPi9StjVfPSQFvLjMCV7Q0HmDm5PKFw3xLqOeCIr8AMrtLHdluWWNLTm6f700nkZ8CmPZ');
+const stripePromise = loadStripe("pk_test_51Q0jkWP9YB5tzFF9e2VMug37nwm5DOPi9StjVfPSQFvLjMCV7Q0HmDm5PKFw3xLqOeCIr8AMrtLHdluWWNLTm6f700nkZ8CmPZ");
 
 const CheckoutForm = () => {
   const stripe = useStripe();
@@ -29,12 +29,13 @@ const CheckoutForm = () => {
       setError(error.message);
     } else {
       // Send paymentMethod.id to your server to create a PaymentIntent
-      const response = await fetch('/api/create-payment-intent', {
+      // const response = await fetch('/api/create-payment-intent', {
+        const response = await fetch('/create-payment-intent', {
+
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ paymentMethodId: paymentMethod.id, amount: 1000, currency: 'usd' }),
       });
-
       const { clientSecret } = await response.json();
       
       // Confirm payment
