@@ -12,8 +12,10 @@ import Footer from './components/Footer/Footer';
 import men_banner from "./components/Assets/banner_mens.png"
 import women_banner from "./components/Assets/banner_women.png"
 import kids_banner from "./components/Assets/banner_kids.png"
+import CheckoutButton from './pages/CheckoutButton';
 
-
+import SuccessPage from './pages/sucess';
+import CancelPage from './pages/CancelPage';
 function App() {
   return (
     <div>
@@ -29,8 +31,11 @@ function App() {
         </Route>
         <Route path='/cart' element={<Cart/>}/>
         <Route path='/login' element={<LoginSignup/>}/>
-        <Route path='/order' element={<PlaceOrder/>}/>
-
+        <Route path='/order' element={<CheckoutButton/>}/>
+        <Route path="/success" element={<SuccessPage />} />
+        {/* <Route path='/checkout' element={<CheckoutButton/>}/> */}
+        <Route path="/cancel" element={<CancelPage />} />
+        
       
 
         

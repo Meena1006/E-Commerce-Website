@@ -1,7 +1,7 @@
 import React from 'react'
 import './CSS/PlaceOrder.css'
 import { Link } from "react-router-dom";
-
+import StripeCheckout from '../components/StripePage/StripePage';
 import axios from 'axios';
 import { loadStripe } from '@stripe/stripe-js';
 import { useContext , useState, useEffect} from 'react';
@@ -40,6 +40,7 @@ const PlaceOrder = () => {
           if (cartItems[e.id] > 0) {
             let itemInfo = e;
             itemInfo["quantity"] = cartItems[e.id];
+            // itemInfo["price"] = cartItems[e.new_price]
 
             orderItems.push(itemInfo);
           }
@@ -48,7 +49,7 @@ const PlaceOrder = () => {
         let orderData = {  
             username: data.firstName,
             items: orderItems,  
-            amount: getTotalCartAmount() + 2,
+            amount: getTotalCartAmount(),
             address: {
                 street: data.street,
                 city: data.city,
@@ -69,6 +70,7 @@ const PlaceOrder = () => {
         
         // 'Accept': 'application/form-data',
         'Content-Type': 'application/json',
+        
       },
       body: JSON.stringify(orderData),
     }).then(response => response.json()).then((data) => responseData = data);
@@ -77,9 +79,9 @@ const PlaceOrder = () => {
           console.log(responseData.success)
           
           console.log("Response data")
-          if (responseData) {  
-            // const {session_url} = responseData.session_url;
-            const {session_url} = responseData;
+          if (responseData.success) {  
+            const {session_url} = responseData.session.url;
+            // const {session_url} = responseData;
               
             console.log("hew")
             window.location.replace(session_url);  
@@ -116,6 +118,9 @@ const PlaceOrder = () => {
                     <input   type="text" name="country" onChange={onChangeHandler} value={data.country}  placeholder="Country" />
                 </div>
                 <input   type="text" name="phone" onChange={onChangeHandler} value={data.phone}  placeholder="Phone" />
+
+                
+                <StripeCheckout/>
             </div>
             <div className="place-order-right">
                 <div className="cartitems-down">
@@ -135,9 +140,8 @@ const PlaceOrder = () => {
                             <h3>Total</h3>
                             <h3>${getTotalCartAmount()}</h3>
                         </div>
-                     <button type='submit'>PROCEED TO CHECKOUT</button>
+                    <Link to={'/checkout'}><button>PROCEED TO CHECKOUT</button></Link> 
                     </div>
-
 
                 </div>
             </div>

@@ -8,6 +8,7 @@ const path = require("path");
 const cors = require("cors");
 const orderRouter = require("./routes/orderRoute");
 // const orderRouter = require("./routes/orderRoute.js");
+const stripe = require('stripe')('sk_test_51Q0jkWP9YB5tzFF9p1I5y1Rckpap4IqrmY4nW1i9JBHLebHxonQAhhHp8gD2bu7gQS3vnd9iUkuiKfRnzyvHVskX00ABbOAZF7'); // Replace with your actual secret key
 
 
 
@@ -282,88 +283,177 @@ app.post('/getcart', fetchUser, async (req, res) => {
 // app.use('/order', orderRouter);
 
 
-const Stripe = require("stripe");
-// Placing user order for frontend  
-const stripe = new Stripe("sk_test_51Q0jkWP9YB5tzFF9p1I5y1Rckpap4IqrmY4nW1i9JBHLebHxonQAhhHp8gD2bu7gQS3vnd9iUkuiKfRnzyvHVskX00ABbOAZF7")
+// const Stripe = require("stripe");
+// // Placing user order for frontend  
+// const stripe = new Stripe("sk_test_51Q0jkWP9YB5tzFF9p1I5y1Rckpap4IqrmY4nW1i9JBHLebHxonQAhhHp8gD2bu7gQS3vnd9iUkuiKfRnzyvHVskX00ABbOAZF7")
 
+
+// const orderSchema = mongoose.model('orderSchema', {
+//   username: { type: String, required: true },
+//   items: { type: Array, required: true },
+//   amount: { type: Number, required: true },
+//   address: { type: Object, required: true },
+//   status: { type: String, default: "Clothing shipping" },
+//   date: { type: Date, default: Date.now() },
+//   payment: { type: Boolean, default: false }
+// });
+// app.post('/placeOrder', async (req, res) => {
+//   const frontend_url = "http://localhost:3000"
+//   try {
+//     const newOrder = new orderSchema({
+//       username: req.body.username,
+//       items: req.body.items,
+//       amount: req.body.amount,
+//       address: req.body.address
+//     })
+//     await newOrder.save();
+  
+
+//     const data = {
+//       user: {
+//         id: newOrder.id
+//       }
+//     }
+  
+//     const token = jwt.sign(data, 'secret_ecom');
+//     res.json({ success: true, token });
+  
+  
+//     // await userModel.findByIdAndUpdate(req.body.userId, { orderSchema: {} });  
+//     await Users.findByIdAndUpdate(req.body.id, { cartData: {} });
+
+
+//     const line_items = req.body.items.map((item) => ({
+//       price_data: {
+//         currency: "inr",
+//         product_data: {
+//           name: item.name
+//         },
+//         unit_amount: req.body.amount * 100 
+//       },
+//       quantity: item.quantity
+//     }));
+
+//     line_items.push({
+//       price_data: {
+//         currency: "inr",
+//         product_data: {
+//           name: "Delivery Charges"
+//         },
+//         unit_amount: 0
+//       },
+//       quantity: 1
+//     })
+
+//     const session = await stripe.checkout.sessions.create({
+//       line_items: line_items,
+//       mode: 'payment',
+//       success_url: `${frontend_url}/verify?success=true&orderId=${newOrder._id}`,
+//       cancel_url: `${frontend_url}/verify?success=false&orderId=${newOrder._id}`,
+//       // success_url: `${frontend_url}/verify?success=true`,
+//       // cancel_url: `${frontend_url}/verify?success=false`,
+
+//     })
+//     window.location.href = 'https://buy.stripe.com/test_8wMaHJ8ZzgS20GkeUU';
+//     console.log(session)
+//     res.json({ success: true, session_url: session.url })
+//   } catch (error) {
+    
+//     console.log("Error occured heyy")
+//     console.log(error)
+
+//     res.json({ success: false, message: "error" })
+
+
+//   }
+// }
+
+// )
+
+
+app.use(express.json());
 
 const orderSchema = mongoose.model('orderSchema', {
-  username: { type: String, required: true },
+  userID: { type: String,  required: true },
   items: { type: Array, required: true },
   amount: { type: Number, required: true },
-  address: { type: Object, required: true },
   status: { type: String, default: "Clothing shipping" },
   date: { type: Date, default: Date.now() },
   payment: { type: Boolean, default: false }
 });
-app.post('/placeOrder', async (req, res) => {
-  const frontend_url = "http://localhost:3000"
+
+app.post('/create-checkout-session', async (req, res) => {
+  
   try {
+    // const token = req.headers.authorization?.split(' ')[1]; // Get the token from Authorization header
+    // if (!token) return res.status(401).json({ error: 'Unauthorized' });
+
+    // const decoded = jwt.verify(token, 'secret_ecom'); // Verify the token
+    // const userId = decoded.id;
     const newOrder = new orderSchema({
-      username: req.body.username,
+      userID : req.body.userID,
       items: req.body.items,
       amount: req.body.amount,
-      address: req.body.address
     })
-    await newOrder.save();
+    // const token = jwt.sign(data, 'secret_ecom');
+    
   
-
+    
     const data = {
       user: {
         id: newOrder.id
       }
     }
-  
+    
     const token = jwt.sign(data, 'secret_ecom');
-    res.json({ success: true, token });
-  
-  
-    // await userModel.findByIdAndUpdate(req.body.userId, { orderSchema: {} });  
-    await Users.findByIdAndUpdate(req.body.id, { cartData: {} });
-
-
-    const line_items = req.body.items.map((item) => ({
+    console.log(newOrder)
+    console.log(data)
+    await newOrder.save();
+    let line_items = []
+    line_items = req.body.items.map((item) => ({
       price_data: {
-        currency: "inr",
+        currency: "usd",
         product_data: {
-          name: item.name
+          name: item.name,
         },
-        unit_amount: item.new_price * 100 
+        unit_amount:item.price * 100
       },
       quantity: item.quantity
     }));
 
-    line_items.push({
-      price_data: {
-        currency: "inr",
-        product_data: {
-          name: "Delivery Charges"
-        },
-        unit_amount: 0
-      },
-      quantity: 1
-    })
+
+  
+    // await userModel.findByIdAndUpdate(req.body.userId, { orderSchema: {} });  
+    // await Users.findByIdAndUpdate(req.body.userID, { cartData: {} });
 
     const session = await stripe.checkout.sessions.create({
-      line_items: line_items,
-      mode: 'payment',
-      success_url: `${frontend_url}/verify?success=true&orderId=${newOrder._id}`,
-      cancel_url: `${frontend_url}/verify?success=false&orderId=${newOrder._id}`,
-      // success_url: `${frontend_url}/verify?success=true`,
-      // cancel_url: `${frontend_url}/verify?success=false`,
-
-    })
-    console.log(session)
-    res.json({ success: true, session_url: session.url })
+      payment_method_types: ['card'], // Define payment methods
+      line_items : line_items,
+      mode: 'payment', // Can be 'payment', 'setup', or 'subscription'
+      success_url: `${req.headers.origin}/success?session_id={CHECKOUT_SESSION_ID}`, // Success redirect URL
+      cancel_url: `${req.headers.origin}/cancel`, // Cancel redirect URL
+    });
+    res.json({ id: session.id }); // Send session ID to the frontend
+    // orderSchema.findByIdAndUpdate(userID, { payment: true }); 
   } catch (error) {
-    
-    console.log("Error occured heyy")
-    console.log(error)
-
-    res.json({ success: false, message: "error" })
-
-
+    res.status(500).json({ error: error.message });
+    // orderSchema.findByIdAndDelete(userID);  
   }
-}
+});
 
-)
+// const verifyOrder = async (req,res) => {  
+//   const { orderId, success } = req.body;  
+//   try {  
+//       if (success == "true") {  
+//           await orderModel.findByIdAndUpdate(orderId, { payment: true });  
+//           res.json({ success: true, message: "Paid" });  
+//       } else {  
+//           await orderModel.findByIdAndDelete(orderId);  
+//           res.json({ success: false, message: "Not Paid" });  
+//       }  
+//   } catch (error) {  
+//       console.log(error);  
+//       res.json({ success: false, message: "Err" });  
+//   }  
+// }
+
