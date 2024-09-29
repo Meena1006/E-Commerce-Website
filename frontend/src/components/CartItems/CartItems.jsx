@@ -5,7 +5,7 @@ import {useNavigate} from "react-router-dom"
 import { useContext, useState} from 'react'
 import remove_icon from "../Assets/cart_cross_icon.png"
 import OrderSummary from '../OrderSummary/OrderSummary'
-import CheckOutpg from '../CheckOutPg/CheckOutpg'
+
 const CartItems = () => {
     const { getTotalCartAmount,all_product, cartItems, removeFromCart } = useContext(ShopContext);
     const [dialogOpen, setDialogOpen] = useState(false);
@@ -18,7 +18,7 @@ const CartItems = () => {
     };
 
     const handleCloseDialog = () => {
-        setDialogOpen(false);
+        setDialogOpen(false)
     };
     return (
         <div className='cartitems'>
@@ -78,7 +78,7 @@ const CartItems = () => {
                 </div>
             </div>
             </div>
-            {dialogOpen && <CheckOutpg open={dialogOpen} onClose={handleCloseDialog} />}
+            
         </div>
     );
 }

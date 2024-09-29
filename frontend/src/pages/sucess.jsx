@@ -1,12 +1,43 @@
 // src/pages/SuccessPage.jsx
-import React from 'react';
+import React, { useEffect, useState ,useContext} from 'react';
 import { useSearchParams } from 'react-router-dom';
 import './CSS/SuccessPage.css';
-
+import { useLocation } from 'react-router-dom';
+import { ShopContext } from '../Context/ShopContext';
 const SuccessPage = () => {
   const [searchParams] = useSearchParams();
   const sessionId = searchParams.get('session_id');
+  // const location = useLocation();
 
+  // Extract the session_id from the URL
+  const location = useLocation();
+  const [verified, setVerified] = useState(false);
+
+  // Extract the session_id from the URL
+  const params = new URLSearchParams(location.search);
+  // const sessionId = params.get('session_id');
+
+  useEffect(() => {
+    const verifyPayment = async () => {
+      try {
+          await fetch('http://localhost:4000/verify', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ session_id: sessionId }),
+        });
+
+
+      } catch (error) {
+        console.error("Error verifying payment:", error);
+      }
+    };
+    
+    if (sessionId) {
+      verifyPayment();
+    }
+  }, [sessionId]);
   return (
     <div className="success-container">
       <div className="success-card">
@@ -17,6 +48,7 @@ const SuccessPage = () => {
         <p className="success-session">Session ID: {sessionId}</p>
         <a href="/" className="success-button">Go to Homepage</a>
       </div>
+      
     </div>
   );
 };

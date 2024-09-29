@@ -1,7 +1,7 @@
 import React from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import { Link } from "react-router-dom";
-import StripeCheckout from '../components/StripePage/StripePage';
+
 import axios from 'axios';
 import "./CSS/CheckoutButton.css"
 import { useContext , useState, useEffect} from 'react';
@@ -10,11 +10,11 @@ import { ShopContext } from '../Context/ShopContext';
 const CheckoutButton = () => {
   const {getTotalCartAmount,all_product, cartItems} = useContext(ShopContext);
 //--------------------------------------------------------
-const [userId, setUserId] = useState('');
+const [name, setname] = useState('');
 const [isSubmitting, setIsSubmitting] = useState(false); // New state to track button state
 
 const handleInputChange = (event) => {
-  setUserId(event.target.value);
+  setname(event.target.value);
 };
 
 const handleSubmit = (event) => {
@@ -23,7 +23,7 @@ const handleSubmit = (event) => {
 
   // Simulating a submission process (like an API call)
   setTimeout(() => {
-    console.log("User ID submitted:", userId);
+    console.log("User ID submitted:", name);
     setIsSubmitting(false); // Re-enable the button after processing
     // setUserId(''); // Optionally clear the input field
   }, 2000); // Simulate a 2-second delay
@@ -31,9 +31,8 @@ const handleSubmit = (event) => {
   //-------------------------------------------------------
   const handleCheckout = async (event) => {
     event.preventDefault();
-    let userid = userId
    console.log("Entering checkout handler")
-   console.log(userid)
+   console.log(name)
         let orderItems = [];
         all_product.map((e) => {
           if (cartItems[e.id] > 0) {
@@ -47,7 +46,7 @@ const handleSubmit = (event) => {
         });
         console.log(orderItems);
         let orderData = {  
-            userID: userid,
+            name: name,
             items: orderItems,  
             amount: getTotalCartAmount(),
           
@@ -69,7 +68,12 @@ const handleSubmit = (event) => {
     // Redirect to Stripe Checkout
     const stripe = await loadStripe('pk_test_51Q0jkWP9YB5tzFF9e2VMug37nwm5DOPi9StjVfPSQFvLjMCV7Q0HmDm5PKFw3xLqOeCIr8AMrtLHdluWWNLTm6f700nkZ8CmPZ'); // Replace with your public key
     await stripe.redirectToCheckout({ sessionId: id });
+
+    
   };
+
+
+  
 
   return (
 
@@ -80,8 +84,10 @@ const handleSubmit = (event) => {
         <p className='ptag'>(Enter your correct user ID for proper processing)</p>
         <form onSubmit={handleSubmit}>
           <input 
+
+
             type="text" 
-            value={userId} 
+            value={name} 
             onChange={handleInputChange} 
             placeholder="User ID" 
             className="user-id-input" 

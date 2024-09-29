@@ -67,6 +67,8 @@ const ShopContextProvider = (props) => {
             }
         }
 
+        
+
         const getTotalCartAmount = () => {
             let totalAmount = 0;
             for (const item in cartItems) {

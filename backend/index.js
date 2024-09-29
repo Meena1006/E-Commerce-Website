@@ -6,8 +6,7 @@ const jwt = require("jsonwebtoken");
 const multer = require("multer");
 const path = require("path");
 const cors = require("cors");
-const orderRouter = require("./routes/orderRoute");
-// const orderRouter = require("./routes/orderRoute.js");
+
 const stripe = require('stripe')('sk_test_51Q0jkWP9YB5tzFF9p1I5y1Rckpap4IqrmY4nW1i9JBHLebHxonQAhhHp8gD2bu7gQS3vnd9iUkuiKfRnzyvHVskX00ABbOAZF7'); // Replace with your actual secret key
 
 
@@ -374,12 +373,12 @@ app.post('/getcart', fetchUser, async (req, res) => {
 app.use(express.json());
 
 const orderSchema = mongoose.model('orderSchema', {
-  userID: { type: String,  required: true },
+  name: { type: String,  required: true },
   items: { type: Array, required: true },
   amount: { type: Number, required: true },
   status: { type: String, default: "Clothing shipping" },
   date: { type: Date, default: Date.now() },
-  payment: { type: Boolean, default: false }
+  payment: { type: Boolean, default: false}
 });
 
 app.post('/create-checkout-session', async (req, res) => {
@@ -391,7 +390,7 @@ app.post('/create-checkout-session', async (req, res) => {
     // const decoded = jwt.verify(token, 'secret_ecom'); // Verify the token
     // const userId = decoded.id;
     const newOrder = new orderSchema({
-      userID : req.body.userID,
+      name : req.body.name,
       items: req.body.items,
       amount: req.body.amount,
     })
@@ -424,7 +423,7 @@ app.post('/create-checkout-session', async (req, res) => {
 
   
     // await userModel.findByIdAndUpdate(req.body.userId, { orderSchema: {} });  
-    // await Users.findByIdAndUpdate(req.body.userID, { cartData: {} });
+    // await users.findByIdAndUpdate(req.body.userID, { cartData: {} });
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'], // Define payment methods
@@ -432,6 +431,10 @@ app.post('/create-checkout-session', async (req, res) => {
       mode: 'payment', // Can be 'payment', 'setup', or 'subscription'
       success_url: `${req.headers.origin}/success?session_id={CHECKOUT_SESSION_ID}`, // Success redirect URL
       cancel_url: `${req.headers.origin}/cancel`, // Cancel redirect URL
+      metadata: {
+        order_id: newOrder.id, // The ID of the order you created in your database
+        name: req.body.name, // Optional: Store the user's ID for reference
+      },
     });
     res.json({ id: session.id }); // Send session ID to the frontend
     // orderSchema.findByIdAndUpdate(userID, { payment: true }); 
@@ -441,19 +444,31 @@ app.post('/create-checkout-session', async (req, res) => {
   }
 });
 
-// const verifyOrder = async (req,res) => {  
-//   const { orderId, success } = req.body;  
-//   try {  
-//       if (success == "true") {  
-//           await orderModel.findByIdAndUpdate(orderId, { payment: true });  
-//           res.json({ success: true, message: "Paid" });  
-//       } else {  
-//           await orderModel.findByIdAndDelete(orderId);  
-//           res.json({ success: false, message: "Not Paid" });  
-//       }  
-//   } catch (error) {  
-//       console.log(error);  
-//       res.json({ success: false, message: "Err" });  
-//   }  
-// }
+app.post('/verify', async (req, res) => {
+  const { session_id } = req.body;
+  try {
+    const session = await stripe.checkout.sessions.retrieve(session_id);
 
+        // Extract the orderer's name from the session metadata
+        const ordererName = session.metadata.name;
+
+        // Find the user by their name
+        const user = await Users.findOne({ name: ordererName });
+
+        if (user) {
+            // Clear cartData if user is found
+            const clearedCartData = {};
+            for (let index = 0; index < 300 + 1; index++) {
+                clearedCartData[index] = 0; // Set all values to 0
+            }
+        
+            // Update the user's cartData to the clearedCartData object
+            await Users.findByIdAndUpdate(user, { cartData: clearedCartData });
+        }
+    
+
+      await orderSchema.findByIdAndUpdate(session.metadata.order_id, { payment: true });
+  } catch (error) {
+    console.error("Error verifying payment:", error);
+  }
+});
