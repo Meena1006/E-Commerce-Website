@@ -1,35 +1,6 @@
-/* MyOrders.css
-.orders-container {
-    margin: 20px;
-    font-family: Arial, sans-serif;
-  }
-  
-  .orders-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-  }
-  
-  .orders-table th, .orders-table td {
-    border: 1px solid #ddd;
-    padding: 12px;
-    text-align: left;
-  }
-  
-  .orders-table th {
-    background-color: #f4f4f4;
-    color: #333;
-  }
-  
-  .orders-table tr:hover {
-    background-color: #f1f1f1;
-  }
-  
-  .orders-table td {
-    vertical-align: middle;
-  } */
+
   .orders-container {
-    max-width: 1200px;
+    max-width: 1100px;
     margin: 0 auto;
     padding: 20px;
     font-family: Arial, sans-serif;
@@ -43,7 +14,7 @@
 
 .orders-table th,
 .orders-table td {
-    border: 1px solid #e28989;
+    border: 1px solid #6a0c0c70;
     padding: 8px;
     text-align: left;
 }
@@ -54,7 +25,7 @@
 }
 
 .orders-table tr:nth-child(even) {
-    background-color: #f0bfbf;
+    background-color: #602d2d41;
 }
 
 .orders-table tr:hover {

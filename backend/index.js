@@ -283,7 +283,7 @@ const orderSchema = mongoose.model('orderSchema', {
   name: { type: String,  required: true },
   items: { type: Array, required: true },
   amount: { type: Number, required: true },
-  status: { type: String, default: "Clothing shipping" },
+  status: { type: String, default: "Ordered" },
   date: { type: Date, default: Date.now() },
   payment: { type: Boolean, default: false}
 });
@@ -396,5 +396,31 @@ app.post('/getorders', fetchUser, async (req, res) => {
     res.json(orders);
   } catch (error) {
     res.status(500).json({ error: "Failed to retrieve orders" });
+  }
+});
+
+app.post('/getordersAdmin', async (req, res) => {
+
+  try {
+    // Find orders where name matches and paymentStatus is true
+    const orders = await orderSchema.find({payment: true });
+    res.json(orders);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to retrieve orders" });
+  }
+});
+
+app.put('/orders/:orderId/status', async (req, res) => {
+  const { orderId } = req.params;
+  const { status } = req.body;
+
+  try {
+    const updatedOrder = await orderSchema.findByIdAndUpdate(orderId, { status: status }, { new: true });
+    if (!updatedOrder) {
+      return res.status(404).json({ error: 'Order not found' });
+    }
+    res.json(updatedOrder);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to update status' });
   }
 });
