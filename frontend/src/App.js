@@ -15,6 +15,7 @@ import CheckoutButton from './pages/CheckoutButton';
 
 import SuccessPage from './pages/sucess';
 import CancelPage from './pages/CancelPage';
+import MyOrders from './pages/MyOrders'
 function App() {
   return (
     <div>
@@ -25,6 +26,8 @@ function App() {
         <Route path='/men' element={<ShopCategory banner={men_banner} category="men" />}/>
         <Route path='/women' element={<ShopCategory banner={women_banner} category="women"/>}/>
         <Route path='/kids' element={<ShopCategory banner={kids_banner} category="kid"/>}/>
+        <Route path='/myorder' element={<MyOrders />}/>
+
         <Route path='/product' element={<Product/>}>
               <Route path=':productId' element={<Product/>}/>
         </Route>

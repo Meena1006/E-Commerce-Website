@@ -1,0 +1,81 @@
+/* MyOrders.css
+.orders-container {
+    margin: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .orders-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .orders-table th, .orders-table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+  }
+  
+  .orders-table th {
+    background-color: #f4f4f4;
+    color: #333;
+  }
+  
+  .orders-table tr:hover {
+    background-color: #f1f1f1;
+  }
+  
+  .orders-table td {
+    vertical-align: middle;
+  } */
+  .orders-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.orders-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.orders-table th,
+.orders-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.orders-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+.orders-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.orders-table tr:hover {
+    background-color: #f1f1f1;
+}
+
+.order-image {
+    width: 90px; /* Adjust the width as needed */
+    height: auto;
+    margin-right: 10px; /* Space between images */
+}
+.item-list {
+    list-style-type: disc; /* Change to 'circle' or 'square' if desired */
+    padding-left: 20px; /* Indent the list */
+    margin: 0; /* Remove default margin */
+    list-style: none;}
+
+.img-list{
+    list-style: none;
+}
+.ul-class{
+    padding-top: 20px;
+}
+

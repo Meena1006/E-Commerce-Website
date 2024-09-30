@@ -29,6 +29,8 @@ const Navbar = () => {
           <li onClick={()=>{setmenu("men")}}><Link style={{textDecoration:'none'}} to='/men'>Men</Link> {menu==="men"?<hr/>: <></>}</li>
           <li onClick={()=>{setmenu("women")}}><Link style={{textDecoration:'none'}} to='/women'>Women</Link>{menu==="women"?<hr/>: <></>}</li>
           <li onClick={()=>{setmenu("kids")}}><Link style={{textDecoration:'none'}} to='/kids'>Kids</Link> {menu==="kids"?<hr/>: <></>}</li>
+          <li onClick={()=>{setmenu("myorder")}}><Link style={{textDecoration:'none'}} to='/myorder'>My-Orders</Link> {menu==="myorder"?<hr/>: <></>}</li>
+
         </ul>
         <div className='nav-login-cart'>
           {localStorage.getItem('auth-token')
