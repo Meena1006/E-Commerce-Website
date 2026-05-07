@@ -54,7 +54,7 @@ const handleSubmit = (event) => {
           console.log("entering axios")
           // const token = localStorage.getItem('authToken');
     // Call your backend to create the Checkout Session
-    const response = await fetch('http://localhost:4000/create-checkout-session', {
+    const response = await fetch('${process.env.REACT_APP_API_URL}/create-checkout-session', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

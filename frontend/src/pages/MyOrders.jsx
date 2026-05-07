@@ -8,7 +8,7 @@ const MyOrders = () => {
         const fetchOrders = async () => {
             try {
                 console.log("This is fetch")
-                const response = await fetch('http://localhost:4000/getorders', {
+                const response = await fetch('${process.env.REACT_APP_API_URL}/getorders', {
                     method: 'POST',
                     headers: {
                         'auth-token': localStorage.getItem('auth-token'), // Token stored in localStorage

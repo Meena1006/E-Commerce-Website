@@ -17,7 +17,7 @@ const SuccessPage = () => {
   
     const verifyPayment = async () => {
       try {
-          await fetch('http://localhost:4000/verify', {
+          await fetch('${process.env.REACT_APP_API_URL}/verify', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

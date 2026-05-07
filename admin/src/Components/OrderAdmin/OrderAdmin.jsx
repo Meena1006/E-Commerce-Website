@@ -8,7 +8,7 @@ const OrderAdmin = () => {
         const fetchOrders = async () => {
             try {
                 console.log("This is fetch")
-                const response = await fetch('http://localhost:4000/getordersAdmin', {
+                const response = await fetch('${process.env.REACT_APP_API_URL}/getordersAdmin', {
                     method: 'POST',
                     headers: {
                         'auth-token': localStorage.getItem('auth-token'), // Token stored in localStorage
@@ -49,7 +49,7 @@ const OrderAdmin = () => {
         }));
 
         // Update status in database
-        await fetch(`http://localhost:4000/orders/${orderId}/status`, {
+        await fetch(`${process.env.REACT_APP_API_URL}/orders/${orderId}/status`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
