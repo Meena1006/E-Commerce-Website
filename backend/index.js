@@ -7,13 +7,9 @@ const multer = require("multer");
 const path = require("path");
 const cors = require("cors");
 
+const { storage } = require("./cloudConfig");
+
 const stripe = require('stripe')('sk_test_51Q0jkWP9YB5tzFF9p1I5y1Rckpap4IqrmY4nW1i9JBHLebHxonQAhhHp8gD2bu7gQS3vnd9iUkuiKfRnzyvHVskX00ABbOAZF7'); // Replace with your actual secret key
-
-const API_URL =
-  process.env.NODE_ENV === "production"
-    ? "https://e-commerce-backend-05qa.onrender.com"
-    : "http://localhost:4000";
-
 
 app.use(express.json());
 app.use(cors());
@@ -34,24 +30,40 @@ mongoose.connect(mongoURI)
   .then(() => console.log('Connected to MongoDB Atlas'))
   .catch((error) => console.error('Error connecting to MongoDB:', error));
 
-app.use('/images', express.static('upload/images'))
+// app.use('/images', express.static('upload/images'))
 
-const storage = multer.diskStorage({
-  destination: './upload/images',
-  filename: (req, file, cb) => {
-    return cb(null, `${file.fieldname}_${Date.now()}${path.extname(file.originalname)}`)
+// const storage = multer.diskStorage({
+//   destination: './upload/images',
+//   filename: (req, file, cb) => {
+//     return cb(null, `${file.fieldname}_${Date.now()}${path.extname(file.originalname)}`)
+//   }
+// })
+
+// const upload = multer({ storage: storage })
+
+
+// app.post('/upload', upload.single('product'), (req, res) => {
+//   res.json({
+//     success: 1,
+//     image_url: `${API_URL}/images/${req.file.filename}`
+//   })
+// })
+
+const upload = multer({ storage });
+app.post("/upload", upload.single("product"), (req, res) => {
+  try {
+    res.json({
+      success: 1,
+      image_url: req.file.path
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: 0,
+      message: "Image upload failed"
+    });
   }
-})
-
-const upload = multer({ storage: storage })
-
-
-app.post('/upload', upload.single('product'), (req, res) => {
-  res.json({
-    success: 1,
-    image_url: `${API_URL}/images/${req.file.filename}`
-  })
-})
+});
 
 
 const Product = mongoose.model("Product", {
