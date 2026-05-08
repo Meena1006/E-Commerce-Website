@@ -49,7 +49,7 @@ const upload = multer({ storage: storage })
 app.post('/upload', upload.single('product'), (req, res) => {
   res.json({
     success: 1,
-    image_url: `${process.env.REACT_APP_API_URL}/images/${req.file.filename}`
+    image_url: `${API_URL}/images/${req.file.filename}`
   })
 })
 
