@@ -9,7 +9,7 @@ const cors = require("cors");
 
 const stripe = require('stripe')('sk_test_51Q0jkWP9YB5tzFF9p1I5y1Rckpap4IqrmY4nW1i9JBHLebHxonQAhhHp8gD2bu7gQS3vnd9iUkuiKfRnzyvHVskX00ABbOAZF7'); // Replace with your actual secret key
 
-REACT_APP_API_URL =
+const API_URL =
   process.env.NODE_ENV === "production"
     ? "https://e-commerce-backend-05qa.onrender.com"
     : "http://localhost:4000";

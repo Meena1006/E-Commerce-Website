@@ -3,11 +3,17 @@ import { useState , useEffect } from 'react'
 import "./Popular.css"
 // import data_product from "../Assets/data"
 import Item from '../Item/Item'
+
+const API_URL =
+  process.env.NODE_ENV === "production"
+    ? "https://e-commerce-backend-05qa.onrender.com"
+    : "http://localhost:4000";
+
 const Popular = () => {
     const [popularProducts, setPopularProducts] = useState([]);  
 
     useEffect(() => {  
-        fetch('${process.env.REACT_APP_API_URL}/popularinwomen')  
+        fetch(`${API_URL}/popularinwomen`)  
         .then((response) => response.json())  
         .then((data) => setPopularProducts(data));  
     }, []);

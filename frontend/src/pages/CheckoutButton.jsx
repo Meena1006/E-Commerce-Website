@@ -7,6 +7,11 @@ import "./CSS/CheckoutButton.css"
 import { useContext , useState, useEffect} from 'react';
 import { ShopContext } from '../Context/ShopContext';
 
+const API_URL =
+  process.env.NODE_ENV === "production"
+    ? "https://e-commerce-backend-05qa.onrender.com"
+    : "http://localhost:4000";
+
 const CheckoutButton = () => {
   const {getTotalCartAmount,all_product, cartItems} = useContext(ShopContext);
 //--------------------------------------------------------
@@ -54,7 +59,7 @@ const handleSubmit = (event) => {
           console.log("entering axios")
           // const token = localStorage.getItem('authToken');
     // Call your backend to create the Checkout Session
-    const response = await fetch('${process.env.REACT_APP_API_URL}/create-checkout-session', {
+    const response = await fetch(`${API_URL}/create-checkout-session`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

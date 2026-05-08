@@ -2,6 +2,11 @@ import { useState } from "react"
 import React from 'react'
 import "./CSS/LoginSignup.css"
 
+const API_URL =
+  process.env.NODE_ENV === "production"
+    ? "https://e-commerce-backend-05qa.onrender.com"
+    : "http://localhost:4000";
+
 const LoginSignup = () => {
   const [state, setState] = useState("Login")
   const [formData, setFormData] = useState({
@@ -20,7 +25,7 @@ const LoginSignup = () => {
   const login = async () => {
     console.log("Login Function Executed", formData);
     let responseData
-    await fetch('${process.env.REACT_APP_API_URL}/login', {
+    await fetch(`${API_URL}/login`, {
       method: 'POST',
       headers: {
         'Accept': 'application/form-data',
@@ -39,7 +44,7 @@ const LoginSignup = () => {
   const signup = async () => {
     console.log("Signup Function Executed", formData);
     let responseData
-    await fetch('${process.env.REACT_APP_API_URL}/signup', {
+    await fetch(`${API_URL}/signup`, {
       method: 'POST',
       headers: {
         'Accept': 'application/form-data',

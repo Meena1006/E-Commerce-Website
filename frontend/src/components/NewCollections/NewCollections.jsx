@@ -3,10 +3,16 @@ import { useEffect, useState } from 'react'
 import "./NewCollections.css"
 import Item from '../Item/Item'
 import new_collection from "../Assets/new_collections"
+
+const API_URL =
+  process.env.NODE_ENV === "production"
+    ? "https://e-commerce-backend-05qa.onrender.com"
+    : "http://localhost:4000";
+
 const NewCollections = () => {
   const [new_collection, setNew_collection] = useState([])
   useEffect(() => {  
-    fetch('${process.env.REACT_APP_API_URL}/newcollections')  
+    fetch(`${API_URL}/newcollections`)  
     .then(response => response.json())  
     .then(data => setNew_collection(data));  
 }, []);

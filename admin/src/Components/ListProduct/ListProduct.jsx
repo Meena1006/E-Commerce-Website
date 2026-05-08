@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import "./ListProduct.css"
 import cross_icon from '../../assets/cross_icon.png'
+const API_URL =
+  process.env.NODE_ENV === "production"
+    ? "https://e-commerce-backend-05qa.onrender.com"
+    : "http://localhost:4000";
 const ListProduct = () => {
     const [allproducts, setAllProducts] = useState([])
     //to fetch data frpm the api and store them
     const fetchInfo = async () => {
-        await fetch('${process.env.REACT_APP_API_URL}/allproducts').then((res) => res.json()).then((data) => { setAllProducts(data) });
+        await fetch(`${API_URL}/allproducts`).then((res) => res.json()).then((data) => { setAllProducts(data) });
 
     }
     useEffect(() => {
@@ -13,7 +17,7 @@ const ListProduct = () => {
     }, [])
 
     const remove_product = async (id) => {  
-        await fetch('${process.env.REACT_APP_API_URL}/removeproduct', {  
+        await fetch(`${API_URL}/removeproduct`, {  
             method: 'POST',  
             headers: {  
                 'Accept': 'application/json',  

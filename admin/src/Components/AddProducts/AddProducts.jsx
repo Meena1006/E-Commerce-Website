@@ -1,5 +1,9 @@
 import React, { useState } from 'react'
 import "./AddProducts.css"
+const API_URL =
+  process.env.NODE_ENV === "production"
+    ? "https://e-commerce-backend-05qa.onrender.com"
+    : "http://localhost:4000";
 import upload_area from '../../assets/upload_area.svg'
 const AddProducts = () => {
 
@@ -43,7 +47,7 @@ const AddProducts = () => {
         let formData = new FormData();
         formData.append('product', image);
 
-        await fetch('${process.env.REACT_APP_API_URL}/upload', {
+        await fetch(`${API_URL}/upload`, {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -54,7 +58,7 @@ const AddProducts = () => {
         if (responseData.success) {  
             product.image = responseData.image_url;  
             console.log(product);  
-            await fetch('${process.env.REACT_APP_API_URL}/addproduct', {  
+            await fetch(`${API_URL}/addproduct`, {  
                 method: 'POST',  
                 headers: {  
                     'Accept': 'application/json',  

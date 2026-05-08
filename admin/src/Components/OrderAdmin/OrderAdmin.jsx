@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import "./OrderAdmin.css"
+
+const API_URL =
+  process.env.NODE_ENV === "production"
+    ? "https://e-commerce-backend-05qa.onrender.com"
+    : "http://localhost:4000";
+    
 const OrderAdmin = () => {
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -8,7 +14,7 @@ const OrderAdmin = () => {
         const fetchOrders = async () => {
             try {
                 console.log("This is fetch")
-                const response = await fetch('${process.env.REACT_APP_API_URL}/getordersAdmin', {
+                const response = await fetch(`${API_URL}/getordersAdmin`, {
                     method: 'POST',
                     headers: {
                         'auth-token': localStorage.getItem('auth-token'), // Token stored in localStorage
@@ -49,7 +55,7 @@ const OrderAdmin = () => {
         }));
 
         // Update status in database
-        await fetch(`${process.env.REACT_APP_API_URL}/orders/${orderId}/status`, {
+        await fetch(`${API_URL}/orders/${orderId}/status`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',

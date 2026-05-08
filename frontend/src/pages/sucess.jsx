@@ -14,10 +14,15 @@ const SuccessPage = () => {
   const params = new URLSearchParams(location.search);
   // const sessionId = params.get('session_id');
 
+  const API_URL =
+  process.env.NODE_ENV === "production"
+    ? "https://e-commerce-backend-05qa.onrender.com"
+    : "http://localhost:4000";
+
   
     const verifyPayment = async () => {
       try {
-          await fetch('${process.env.REACT_APP_API_URL}/verify', {
+          await fetch(`${API_URL}/verify`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

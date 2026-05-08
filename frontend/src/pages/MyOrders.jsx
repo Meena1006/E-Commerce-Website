@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import "./CSS/MyOrders.css"
+
+const API_URL =
+  process.env.NODE_ENV === "production"
+    ? "https://e-commerce-backend-05qa.onrender.com"
+    : "http://localhost:4000";
+
 const MyOrders = () => {
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -8,7 +14,7 @@ const MyOrders = () => {
         const fetchOrders = async () => {
             try {
                 console.log("This is fetch")
-                const response = await fetch('${process.env.REACT_APP_API_URL}/getorders', {
+                const response = await fetch(`${API_URL}/getorders`, {
                     method: 'POST',
                     headers: {
                         'auth-token': localStorage.getItem('auth-token'), // Token stored in localStorage

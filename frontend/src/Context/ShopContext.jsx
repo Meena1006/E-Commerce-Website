@@ -2,6 +2,11 @@ import React, { createContext, useState, useEffect } from "react";
 import jwtDecode from 'jwt-decode';
 export const ShopContext = createContext(null);
 
+const API_URL =
+  process.env.NODE_ENV === "production"
+    ? "https://e-commerce-backend-05qa.onrender.com"
+    : "http://localhost:4000";
+
 const getDefaultCart = () => {
     let cart = {};
     for (let index = 0; index < 300 + 1; index++) {
@@ -15,13 +20,13 @@ const ShopContextProvider = (props) => {
     const [orders, setOrders] = useState([]);
 
     useEffect(() => {
-        fetch('${process.env.REACT_APP_API_URL}/allproducts')
+        fetch(`${API_URL}/allproducts`)
             .then((response) => response.json())
             .then((data) => setAll_Product(data))
 
 
         if (localStorage.getItem('auth-token')) {
-            fetch('${process.env.REACT_APP_API_URL}/getcart', {
+            fetch(`${API_URL}/getcart`, {
                 method: 'POST',
                 headers: {
                     Accept: 'application/form-data',
@@ -40,7 +45,7 @@ const ShopContextProvider = (props) => {
     const addToCart = (itemId) => {
         setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] + 1 }));
         if (localStorage.getItem('auth-token')) {
-            fetch('${process.env.REACT_APP_API_URL}/addtocart', {
+            fetch(`${API_URL}/addtocart`, {
                 method: 'POST',
                 headers: {
                     Accept: 'application/form-data',
@@ -57,7 +62,7 @@ const ShopContextProvider = (props) => {
     const removeFromCart = (itemId) => {
         setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] - 1 }));
         if (localStorage.getItem('auth-token')) {
-            fetch('${process.env.REACT_APP_API_URL}/removefromcart', {
+            fetch(`${API_URL}/removefromcart`, {
                 method: 'POST',
                 headers: {
                     Accept: 'application/form-data',
